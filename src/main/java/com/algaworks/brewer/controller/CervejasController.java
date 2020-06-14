@@ -1,7 +1,10 @@
 package com.algaworks.brewer.controller;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,12 +13,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.algaworks.brewer.model.Cerveja;
+import com.algaworks.brewer.repository.Cervejas;
 
 @Controller
 public class CervejasController {
 	
+	@Autowired
+	private Cervejas cervejas;
+	
 	@RequestMapping("/cervejas/novo")
 	public String novo(Cerveja cerveja) {
+		Optional<Cerveja> cervejaOptional = cervejas.findBySku("AA1111"); 
+		System.out.println(cervejaOptional.isPresent());
 		return "cerveja/CadastroCerveja";
 	}
 	
@@ -26,7 +35,7 @@ public class CervejasController {
 		}
 		
 		//Salvando no banco de dados...
-		attributes.addFlashAttribute("mensagem", "Ceverja cadastrada com sucesso");
+		attributes.addFlashAttribute("mensagem", "Cerveja cadastrada com sucesso");
 		System.out.println(">>>>sky " + cerveja.getSku());
 		return "redirect:/cervejas/novo";
 	}
